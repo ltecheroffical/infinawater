@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "net.ltecher.infinawater.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"MixinWaterFluid",
+		"MixinLavaFluid"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
