@@ -1,3 +1,5 @@
 {
-	"gamerule.doInfiniteLiquids": "Enable Infinite liquids"
+	"gamerule.doInfiniteLiquids": "Enable Infinite liquids",
+	"gamerule.doInfiniteWater": "Enable Infinite water",
+	"gamerule.doInfiniteLava": "Enable Infinite lava"
 }

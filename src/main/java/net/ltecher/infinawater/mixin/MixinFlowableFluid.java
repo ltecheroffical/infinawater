@@ -8,7 +8,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.ltecher.infinawater.InfinaWater;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
@@ -18,8 +20,23 @@ import net.minecraft.util.math.Direction;
 public abstract class MixinFlowableFluid {
     @Inject(method = "tryFlow", at = @At("HEAD"), cancellable = true)
 	private void onTryFlow(ServerWorld world, BlockPos fluidPos, BlockState blockState, FluidState fluidState, CallbackInfo ci) {
-		boolean infiniteLiquids = world.getGameRules().getBoolean(InfinaWater.GAMERULE_DO_INFINITE_LIQUIDS);
-		if (!infiniteLiquids) {
+		if (!world.getGameRules().getBoolean(InfinaWater.GAMERULE_DO_INFINITE_LIQUIDS)) {
+			return;
+		}
+
+		Fluid fluid = fluidState.getFluid();
+
+		boolean isWater = fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER;
+		if (!world.getGameRules().getBoolean(InfinaWater.GAMERULE_DO_INFINITE_WATER) && isWater) {
+			return;
+		}
+
+		boolean isLava = fluid == Fluids.LAVA || fluid == Fluids.FLOWING_LAVA;
+		if (!world.getGameRules().getBoolean(InfinaWater.GAMERULE_DO_INFINITE_LAVA) && isLava) {
+			return;
+		}
+
+		if (!isWater && !isLava) {
 			return;
 		}
 

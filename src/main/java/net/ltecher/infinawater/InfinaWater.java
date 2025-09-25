@@ -15,6 +15,8 @@ public class InfinaWater implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static final GameRules.Key<GameRules.BooleanRule> GAMERULE_DO_INFINITE_LIQUIDS = GameRuleRegistry.register("doInfiniteLiquids", Category.MISC, GameRuleFactory.createBooleanRule(false));
+	public static final GameRules.Key<GameRules.BooleanRule> GAMERULE_DO_INFINITE_WATER = GameRuleRegistry.register("doInfiniteWater", Category.MISC, GameRuleFactory.createBooleanRule(true));
+	public static final GameRules.Key<GameRules.BooleanRule> GAMERULE_DO_INFINITE_LAVA = GameRuleRegistry.register("doInfiniteLava", Category.MISC, GameRuleFactory.createBooleanRule(true));
 
 	@Override
 	public void onInitialize() {
