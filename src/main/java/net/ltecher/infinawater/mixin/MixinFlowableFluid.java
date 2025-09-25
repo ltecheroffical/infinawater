@@ -16,40 +16,6 @@ import net.minecraft.util.math.Direction;
 
 @Mixin(FlowableFluid.class)
 public abstract class MixinFlowableFluid {
-    /*@Inject(method = "getSpread", at = @At("HEAD"), cancellable = true)
-    private void onGetSpread(ServerWorld world, BlockPos pos, BlockState state, CallbackInfoReturnable<Map<Direction, FluidState>> cir) {
-		boolean infiniteLiquids = world.getGameRules().getBoolean(InfinaWater.GAMERULE_DO_INFINITE_LIQUIDS);
-		if (!infiniteLiquids) {
-			return;
-		}
-
-		HashMap<Direction, FluidState> spread = new HashMap<Direction, FluidState>();
-		for (var direction : Direction.values()) {
-			if (direction == Direction.UP) {
-				continue;
-			}
-
-			BlockPos neighborPos = pos.offset(direction);
-			BlockState neighborState = world.getBlockState(neighborPos);
-
-			if (!neighborState.contains(Properties.WATERLOGGED)) {
-				if (!neighborState.canBucketPlace(neighborState.getFluidState().getFluid())) {
-					continue;
-				}
-
-				if (!neighborState.getFluidState().isEmpty()) {
-					continue;
-				}
-			}
-
-            FlowableFluid self = (FlowableFluid) (Object) this;
-			spread.put(direction, self.getStill(false));
-		}
-		
-		cir.setReturnValue(spread);
-    }*/
-
-
     @Inject(method = "tryFlow", at = @At("HEAD"), cancellable = true)
 	private void onTryFlow(ServerWorld world, BlockPos fluidPos, BlockState blockState, FluidState fluidState, CallbackInfo ci) {
 		boolean infiniteLiquids = world.getGameRules().getBoolean(InfinaWater.GAMERULE_DO_INFINITE_LIQUIDS);
