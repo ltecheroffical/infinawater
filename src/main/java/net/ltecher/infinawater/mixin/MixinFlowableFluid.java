@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.ltecher.infinawater.InfinaWater;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -50,16 +51,34 @@ public abstract class MixinFlowableFluid {
 			BlockPos neighborPos = fluidPos.offset(direction);
 			BlockState neighborState = world.getBlockState(neighborPos);
 
-			if (!neighborState.contains(Properties.WATERLOGGED)) {
-				if (!neighborState.canBucketPlace(neighborState.getFluidState().getFluid())) {
-					continue;
-				}
 
-				if (!neighborState.getFluidState().isEmpty()) {
-					continue;
-				}
-			} else {
+			boolean isNeighborLava = neighborState.getFluidState().getFluid() == Fluids.LAVA || neighborState.getFluidState().getFluid() == Fluids.FLOWING_LAVA;
+			boolean isNeighborWater = neighborState.getFluidState().getFluid() == Fluids.WATER || neighborState.getFluidState().getFluid() == Fluids.FLOWING_WATER;
+
+			if (isWater && isNeighborLava) {
+                if (neighborState.getFluidState().isStill()) {
+                    world.setBlockState(neighborPos, Blocks.STONE.getDefaultState());
+                } else {
+                    world.setBlockState(neighborPos, Blocks.COBBLESTONE.getDefaultState());
+                }
+				continue;
+            } else if (isLava && isNeighborWater) {
+                if (neighborState.getFluidState().isStill()) {
+                    world.setBlockState(neighborPos, Blocks.STONE.getDefaultState());
+                } else {
+                    world.setBlockState(neighborPos, Blocks.COBBLESTONE.getDefaultState());
+                }
+				continue;
+            } else if (neighborState.contains(Properties.WATERLOGGED) & isWater) {
 				world.setBlockState(neighborPos, neighborState.with(Properties.WATERLOGGED, true), 3);
+				continue;
+			}
+
+			if (!neighborState.canBucketPlace(neighborState.getFluidState().getFluid())) {
+				continue;
+			}
+
+			if (!neighborState.getFluidState().isEmpty()) {
 				continue;
 			}
 
